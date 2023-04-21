@@ -1,0 +1,73 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           gpti
+version:        0.1.0.0
+synopsis:       Simple REPL for interacting with OpenAI's GPT models
+description:    GPTi provides a REPL interface for interacting with OpenAI GPT models,
+                supporting customizable voice commands, and featuring local function calls.
+homepage:       https://github.com/mlang/gpti#readme
+bug-reports:    https://github.com/mlang/gpti/issues
+author:         Mario Lang
+maintainer:     mlang@blind.guru
+copyright:      2023 Mario Lang
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    examples/config.yaml
+
+source-repository head
+  type: git
+  location: https://github.com/mlang/gpti
+
+executable gpti
+  main-is: Main.hs
+  other-modules:
+      GPTi
+      GPTi.Aeson
+      GPTi.Functions
+      GPTi.LanguageDetection
+      GPTi.Pandoc
+      OpenAI.Lens
+      OpenAI.PatternSynonyms
+      Paths_gpti
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -with-rtsopts=-xm40000000
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , casing
+    , containers
+    , data-default
+    , directory
+    , exceptions
+    , extra
+    , file-embed
+    , hint
+    , http-client
+    , http-client-tls
+    , lens
+    , lens-aeson
+    , megaparsec
+    , mtl
+    , openai-hs >=0.3.0.1
+    , pandoc
+    , pandoc-types
+    , repline
+    , servant-client-core
+    , temporary
+    , text
+    , text-ansi
+    , time
+    , typed-process
+    , vector
+    , wreq
+    , xdg-basedir
+    , yaml
+  default-language: Haskell2010

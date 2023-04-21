@@ -1,0 +1,68 @@
+name:                gpti
+version:             0.1.0.0
+github:              "mlang/gpti"
+license:             BSD3
+author:              "Mario Lang"
+maintainer:          "mlang@blind.guru"
+copyright:           "2023 Mario Lang"
+
+synopsis:         Simple REPL for interacting with OpenAI's GPT models
+description: |
+  GPTi provides a REPL interface for interacting with OpenAI GPT models,
+  supporting customizable voice commands, and featuring local function calls.
+
+extra-source-files:
+- examples/config.yaml
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+executables:
+  gpti:
+    main:                Main.hs
+    source-dirs:         .
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -with-rtsopts=-xm40000000
+    dependencies:
+    - aeson
+    - base >= 4.7 && < 5
+    - bytestring
+    - casing
+    - containers
+    - data-default
+    - directory
+    - exceptions
+    - extra
+    - file-embed
+    - hint
+    - http-client
+    - http-client-tls
+    - lens
+    - lens-aeson
+    - megaparsec
+    - mtl
+    - openai-hs >= 0.3.0.1
+    - pandoc
+    - pandoc-types
+    - repline
+    - servant-client-core
+    - temporary
+    - text
+    - text-ansi
+    - time
+    - typed-process
+    - vector
+    - wreq
+    - xdg-basedir
+    - yaml
