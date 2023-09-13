@@ -1,6 +1,5 @@
-resolver: lts-21.2
-packages:
-- .
+resolver: lts-21.11
+packages: ["."]
 extra-deps:
 - openai-hs-0.3.0.1
 - openai-servant-0.3.0.1

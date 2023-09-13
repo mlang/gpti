@@ -23,6 +23,7 @@ import           Control.Monad.Reader           (MonadReader (..), asks,
                                                  runReaderT)
 import           Control.Monad.State            (MonadState (..), execStateT,
                                                  gets)
+import           Data.Aeson                     (ToJSON (..))
 import qualified Data.Aeson                     as Aeson
 import           Data.Aeson.Lens                (_String, key)
 import qualified Data.ByteString.Lazy           as ByteString (fromStrict)
@@ -161,10 +162,8 @@ submit input = send $ UserMessage input where
             Just f -> do
               output <- f args
               unless quiet $ do
-                putTextLn $
-                  name <>
-                  Text.decodeUtf8 (ByteString.toStrict (Aeson.encode args)) <>
-                  " -> " <> output
+                putTextLn $ name <> jsonText args
+                putTextLn $ output
               request.messages <>= [msg, reply]
               send $ FunctionResultMessage name output
             Nothing -> putTextLn . red $ "ERROR: Model tried to call unknown function '" <> name <> "'"
@@ -183,6 +182,9 @@ submit input = send $ UserMessage input where
     go doc = do
       seenLinks <>= links doc
       traverse_ handleCodeBlock . codeBlocks $ doc
+
+jsonText :: ToJSON a => a -> Text
+jsonText = Text.decodeUtf8 . ByteString.toStrict . Aeson.encode
 
 printClientError :: MonadIO m => ClientError -> m ()
 printClientError (FailureResponse _ resp) = liftIO $
@@ -338,11 +340,12 @@ cmdHear = do
 
 cmdVisit :: MonadIO m => String -> m ()
 cmdVisit link = runProcess_ =<< ifM inTmux newWin normal where
-  newWin = pure $ proc "tmux" ["new-window", "sensible-browser", stripString link]
-  normal = pure $ proc "sensible-browser" [stripString link]
+  newWin = pure $ proc "tmux" ["new-window", "sensible-browser", strip link]
+  normal = pure $ proc "sensible-browser" [strip link]
 
-stripString :: String -> String
-stripString = Text.unpack . Text.strip . fromString
+class Strippable a where strip :: a -> a
+instance Strippable Text where strip = Text.strip
+instance Strippable String where strip = Text.unpack . strip . Text.pack
 
 unknownProgram :: MonadIO m => Text -> [String] -> m ()
 unknownProgram kind args = putTextLn . red $
@@ -361,7 +364,7 @@ transcribe fp = do
 
 cmdTranscribe :: (MonadReader OpenAIClient m, MonadState ReplState m, MonadIO m)
               => FilePath -> m ()
-cmdTranscribe fp = transcribe (stripString fp) >>= \case
+cmdTranscribe fp = transcribe (strip fp) >>= \case
   Left e    -> printClientError e
   Right txt -> putTextLn $ bold txt
 
