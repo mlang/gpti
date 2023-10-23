@@ -14,7 +14,7 @@ import           Text.Pandoc.Walk               (query)
 codeBlocks :: Pandoc -> [(Attr, Text)]
 codeBlocks = query $ \case
   CodeBlock attrs text -> [(attrs, text)]
-  _                    -> []
+  _                    -> mempty
 
 links :: Pandoc -> [Text]
 links = query $ \case
