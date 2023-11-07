@@ -106,7 +106,7 @@ makeLensesWith abbreviatedFields ''Config
 $(deriveJSON (jsonOpts 1) ''Config)
 
 chatModel, transcriptionModel :: ModelId
-chatModel = coerce $ Text.pack "gpt-4"
+chatModel = coerce $ Text.pack "gpt-4-1106-preview"
 transcriptionModel = coerce $ Text.pack "whisper-1"
 
 defaultConfig :: Config
